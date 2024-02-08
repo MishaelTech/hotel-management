@@ -6,7 +6,7 @@ export type Booking = {
         slug: { current: string };
         price: number;
     };
-    checkinDate: string
+    checkinDate: string;
     checkoutDate: string;
     numberOfDays: number;
     adults: number;
