@@ -1,17 +1,19 @@
-import { CreateBookingDto, Room } from "@/models/room";
-import sanityClient from "./sanity";
-import * as queries from "./sanityQueries";
-import axios from "axios";
-import { Booking } from "@/models/booking";
-import { CreateReviewDto, Review, UpdateReviewDto } from "@/models/review";
+import { CreateReviewDto, Review } from './../models/review';
+import axios from 'axios';
+
+import { CreateBookingDto, Room } from '@/models/room';
+import sanityClient from './sanity';
+import * as queries from './sanityQueries';
+import { Booking } from '@/models/booking';
+import { UpdateReviewDto } from '@/models/review';
 
 export async function getFeaturedRoom() {
   const result = await sanityClient.fetch<Room>(
     queries.getFeaturedRoomQuery,
     {},
-    { cache: "no-cache" }
-    // { next: { revalidate: 1800 } } //It will change every 30min in deployment
+    { cache: 'no-cache' }
   );
+
   return result;
 }
 
@@ -25,10 +27,12 @@ export async function getRooms() {
 }
 
 export async function getRoom(slug: string) {
-  const result = await sanityClient.fetch<Room>(queries.getRoom,
+  const result = await sanityClient.fetch<Room>(
+    queries.getRoom,
     { slug },
     { cache: 'no-cache' }
   );
+
   return result;
 }
 
@@ -95,13 +99,16 @@ export const updateHotelRoom = async (hotelRoomId: string) => {
 };
 
 export async function getUserBookings(userId: string) {
-  const result = await sanityClient.fetch<Booking[]>(queries.getUserBookingQuery, {
-    userId,
-  },
+  const result = await sanityClient.fetch<Booking[]>(
+    queries.getUserBookingsQuery,
+    {
+      userId,
+    },
     { cache: 'no-cache' }
   );
+
   return result;
-};
+}
 
 export async function getUserData(userId: string) {
   const result = await sanityClient.fetch(
@@ -109,16 +116,17 @@ export async function getUserData(userId: string) {
     { userId },
     { cache: 'no-cache' }
   );
+
   return result;
-};
+}
 
 export async function checkReviewExists(
   userId: string,
   hotelRoomId: string
 ): Promise<null | { _id: string }> {
   const query = `*[_type == 'review' && user._ref == $userId && hotelRoom._ref == $hotelRoomId][0] {
-      _id
-    }`;
+    _id
+  }`;
 
   const params = {
     userId,
